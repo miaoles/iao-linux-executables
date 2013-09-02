@@ -1,0 +1,5 @@
+#! /bin/sh
+
+BSPWM_NEW_DESKTOP=$(zenity --entry --text="Enter new desktop name:")
+
+bspc monitor -a $BSPWM_NEW_DESKTOP

@@ -1,0 +1,5 @@
+#! /bin/sh
+
+BSPWM_REMOVE_DESKTOP=$(zenity --entry --text="Enter desktops to remove:")
+
+bspc monitor -r $BSPWM_REMOVE_DESKTOP
