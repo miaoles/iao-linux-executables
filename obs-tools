@@ -1,0 +1,15 @@
+#!/bin/bash
+# obs-tools
+
+case $1 in
+	mpd-output-start)
+		${EDITOR} -e 'sh /home/miles/Executables/Twitch/mpd-nowplaying-output.sh' --hold &
+		echo $! > /home/miles/Executables/Twitch/mpd-nowplaying-PID.txt
+		;;
+	mpd-output-end)
+		pkill -f mpd-nowplaying-output.sh
+		;;
+	*)
+		echo "ERROR"
+		;;
+esac

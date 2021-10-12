@@ -1,0 +1,6 @@
+#!/bin/sh
+# protiaon
+
+echo "Enter Steam Game ID (PoE is 238960):"
+read GAMEID
+WINEPREFIX="/iao/Games/Steam Library/steamapps/compatdata/$GAMEID/pfx" WINEARCH="win64" winecfg

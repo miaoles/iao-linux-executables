@@ -1,0 +1,23 @@
+#!/bin/sh
+# cpugov
+
+complete -W "performance powersave info" cpugov
+
+case $1 in
+	performance)
+		echo "${BOLD}Setting CPU scaling governor mode to Performance${RESET}"
+		sudo cpupower frequency-set -g performance
+		;;
+	powersave)
+		echo "${BOLD}Setting CPU scaling governor mode to PowerSave${RESET}"
+		sudo cpupower frequency-set -g powersave
+		;;
+	info)
+		echo "${BOLD}The current CPU scaling governors:${RESET}"
+		cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized CPU scaling governor"
+		echo "${BOLD}Available:${RESET} performance, powersave, info"
+		;;
+esac

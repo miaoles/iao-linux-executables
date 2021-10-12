@@ -1,0 +1,76 @@
+#!/bin/bash
+# iao-initialize-directories
+
+FAST_DIR="/iao"
+USER_DIR="${HOME}"
+
+echo "${BOLD}Creating Fast Storage Directory${RESET}"
+sudo mkdir -v "${FAST_DIR}"
+echo "${BOLD}Changing Fast Storage Directory Ownership to User${RESET}"
+sudo chown -v ${USER} "${FAST_DIR}"
+
+echo "${BOLD}Cloning Configuration Directories for User${RESET}"
+git clone https://github.com/miaoles/iao-linux-config.git "${HOME_DIR}/Configuration"
+echo "${BOLD}Linking Configuration Directory Corrections${RESET}"
+ln -sv "${HOME_DIR}/Configuration" "${HOME_DIR}/.config"
+ln -sv "${HOME_DIR}/Configuration/Themes" "${HOME_DIR}/.themes"
+ln -sv "${HOME_DIR}/Configuration/Fonts" "${HOME_DIR}/.fonts"
+ln -sv "${HOME_DIR}/Configuration/bash/bashrc" "${HOME_DIR}/.bashrc"
+ln -sv "${HOME_DIR}/Configuration/bash/bash_profile" "${HOME_DIR}/.bash_profile"
+ln -sv "${HOME_DIR}/Configuration/gtk-2.0/gtkrc-2.0" "${HOME_DIR}/.gtkrc-2.0"
+ln -sv "${HOME_DIR}/Configuration/xinit/xinitrc" "${HOME_DIR}/.xinitrc"
+ln -sv "${HOME_DIR}/Configuration/Xorg/Xdefaults" "${HOME_DIR}/.Xdefaults"
+ln -sv "${HOME_DIR}/Configuration/Xorg/Xresources" "${HOME_DIR}/.Xresources"
+
+echo "${BOLD}Creating Development Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Development"
+
+echo "${BOLD}Creating Documents Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Documents"
+
+echo "${BOLD}Cloning Executables Directories in Fast Storage${RESET}"
+git clone https://github.com/miaoles/iao-linux-executables.git "${FAST_DIR}/Executables"
+echo "${BOLD}Linking Executables Directories for User${RESET}"
+ln -sv "${FAST_DIR}/Executables" "${HOME_DIR}/Executables"
+
+echo "${BOLD}Creating Games Directories in Fast Storage${RESET}"
+mkdir -v "${FAST_DIR}/Games"
+mkdir -v "${FAST_DIR}/Steam Library"
+mkdir -v "${FAST_DIR}/Heroic Library"
+echo "${BOLD}Linking Games Directories for User${RESET}"
+ln -sv "${FAST_DIR}/Games" "${HOME_DIR}/Games"
+
+echo "${BOLD}Creating Images Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Images"
+mkdir -v "${HOME_DIR}/Images/Screenshots"
+mkdir -v "${HOME_DIR}/Images/Wallpapers"
+
+echo "${BOLD}Creating Sounds Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Sounds"
+
+echo "${BOLD}Creating Transfers Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Transfers"
+mkdir -v "${HOME_DIR}/Transfers/Torrents"
+mkdir -v "${HOME_DIR}/Transfers/Soulseek"
+mkdir -v "${HOME_DIR}/Transfers/Share"
+mkdir -v "${HOME_DIR}/Transfers/Downloads"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Archives"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Documents"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Executables"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Images"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Sounds"
+mkdir -v "${HOME_DIR}/Transfers/Downloads/Videos"
+
+echo "${BOLD}Creating Videos Directories for User${RESET}"
+mkdir -v "${HOME_DIR}/Videos"
+mkdir -v "${HOME_DIR}/Videos/Recordings"
+
+echo "${BOLD}Creating Virtual Directories in Fast Storage${RESET}"
+mkdir -v "${FAST_DIR}/Virtual"
+mkdir -v "${FAST_DIR}/Virtual/VirtualBox"
+mkdir -v "${FAST_DIR}/Virtual/Proton Prefixes"
+mkdir -v "${FAST_DIR}/Virtual/Wine Prefixes"
+mkdir -v "${FAST_DIR}/Virtual/Wine Prefixes/Default"
+echo "${BOLD}Linking Virtual Directories Corrections${RESET}"
+ln -sv "${FAST_DIR}/Virtual" "${HOME_DIR}/Virtual"
+ln -sv "${HOME_DIR}/Virtual/Wine Prefixes/Default" "${HOME_DIR}/.wine"

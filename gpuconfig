@@ -1,0 +1,43 @@
+#!/bin/bash
+# gpuconfig
+
+complete -W "balanced-auto performance-auto performance-high info" gpuconfig
+
+case $1 in
+	balanced-auto)
+		sudo sh -c "echo balanced > /sys/class/drm/card0/device/power_dpm_state"
+		sudo sh -c "echo auto > /sys/class/drm/card0/device/power_dpm_force_performance_level"
+		echo "${BOLD}DPM State set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_state
+		echo "${BOLD}DPM Performance Level set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_force_performance_level
+		;;
+	performance-auto)
+		sudo sh -c "echo performance > /sys/class/drm/card0/device/power_dpm_state"
+		sudo sh -c "echo auto > /sys/class/drm/card0/device/power_dpm_force_performance_level"
+		echo "${BOLD}DPM State set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_state
+		echo "${BOLD}DPM Performance Level set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_force_performance_level
+		;;
+	performance-high)
+		sudo sh -c "echo performance > /sys/class/drm/card0/device/power_dpm_state"
+		sudo sh -c "echo high > /sys/class/drm/card0/device/power_dpm_force_performance_level"
+		echo "${BOLD}DPM State set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_state
+		echo "${BOLD}DPM Performance Level set to:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_force_performance_level
+		;;
+	info)
+		echo "${BOLD}Current DPM State:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_state
+		echo "${BOLD}Current GDPM Performance Level:${RESET}"
+		sudo cat /sys/class/drm/card0/device/power_dpm_force_performance_level
+		echo "${BOLD}GPU Configuration:${RESET}"
+		sudo cat /sys/kernel/debug/dri/0/amdgpu_pm_info
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized Argument"
+		echo "${BOLD}Available:${RESET} balanced-auto, performance-auto, performance-high, info"
+		;;
+esac

@@ -1,0 +1,4 @@
+#!/bin/bash
+# getwmclass
+
+xprop | awk '/WM_CLASS/{print $4}'
