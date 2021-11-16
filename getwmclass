@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # getwmclass
 
 xprop | awk '/WM_CLASS/{print $4}'

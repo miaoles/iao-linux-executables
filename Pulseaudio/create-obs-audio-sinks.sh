@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 # Create PulseAudio combines and sinks for OBS
 

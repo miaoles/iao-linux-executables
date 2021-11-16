@@ -4,16 +4,16 @@
 complete -W "on off" gamemiaode
 
 case $1 in
-	on)
-		cpugov performance
-		gpuconfig performance-high
-		;;
-	off)
-		cpugov powersave
-		gpuconfig balanced-auto
-		;;
-	*)
-		echo "${BOLD}Error${RESET} - Unrecognized Argument"
-		echo "${BOLD}Available:${RESET} on, off"
-		;;
+on)
+	cpugov performance
+	gpuconfig performance-high
+	;;
+off)
+	cpugov powersave
+	gpuconfig balanced-auto
+	;;
+*)
+	echo "${BOLD}Error${RESET} - Unrecognized Argument"
+	echo "${BOLD}Available:${RESET} on, off"
+	;;
 esac

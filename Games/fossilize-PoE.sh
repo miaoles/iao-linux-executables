@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # fossilize-PoE
 
 echo "Using fossilize-replay to generate DXVK shaders for Path of Exile x64 with $1 threads"

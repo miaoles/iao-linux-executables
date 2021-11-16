@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# reciaonfigure
+
+complete -W "tint2" reciaonfigure
+
+case $1 in
+tint2)
+	pkill tint2;
+	tint2 -c ~/Configuration/tint2/iao_left.tint2rc &
+	tint2 -c ~/Configuration/tint2/iao_center.tint2rc &
+	tint2 -c ~/Configuration/tint2/iao_right.tint2rc &
+	;;
+esac

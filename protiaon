@@ -1,6 +1,11 @@
 #!/bin/sh
+
 # protiaon
 
-echo "Enter Steam Game ID (PoE is 238960):"
-read GAMEID
-WINEPREFIX="/iao/Games/Steam Library/steamapps/compatdata/$GAMEID/pfx" WINEARCH="win64" winecfg
+echo "Enter Steam Library Directory:"
+read STEAM_LIBRARY_DIR
+
+echo "Enter Steam Game ID (PoE is 238960, Gordian is 981430):"
+read STEAM_GAME_ID
+
+WINEPREFIX="$STEAM_LIBRARY_DIR/steamapps/compatdata/$STEAM_GAME_ID/pfx" WINEARCH="win64" winecfg

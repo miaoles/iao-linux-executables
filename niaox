@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+# niaox - Shortcuts for NixOS Operations
+
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+complete -W "update rebuild upgrade root user os home both" niaox
+#complete -W "root user both" niaox update
+#complete -W "os home both" niaox rebuild
+#complete -W "os home both" niaox upgrade
+
+case $1 in
+update)
+	case $2 in
+	root|os)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Root"
+		sudo nix-channel --update
+		;;
+	user|home)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Current User"
+		nix-channel --update
+		;;
+	both)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Both (Root & Current User)"
+		sudo nix-channel --update
+		nix-channel --update
+		;;
+	"")
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Default (Root & Current User)"
+		sudo nix-channel --update
+		nix-channel --update
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}update${RESET} option"
+		echo "${BOLD}Available:${RESET} root, user, both"
+		;;
+	esac
+	;;
+rebuild)
+	case $2 in
+	root|os)
+		echo "${BOLD}Rebuilding Generation for:${RESET} NixOS"
+		sudo nixos-rebuild build
+		;;
+	user|home)
+		echo "${BOLD}Rebuilding Generation for:${RESET} home-manager"
+		home-manager build
+		;;
+	both)
+		echo "${BOLD}Rebuilding Generation for:${RESET} Both (NixOS & home-manager)"
+		sudo nixos-rebuild build
+		home-manager build
+		;;
+	"")
+		echo "${BOLD}Rebuilding Generation for:${RESET} Default (NixOS & home-manager)"
+		sudo nixos-rebuild build
+		home-manager build
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}rebuild${RESET} option"
+		echo "${BOLD}Available:${RESET} os, home, both"
+		;;
+	esac
+	;;
+upgrade)
+	case $2 in
+	root|os)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Root"
+		echo "${BOLD}Rebuilding and Switching to Generation for:${RESET} NixOS"
+		sudo nix-channel --update
+		sudo nixos-rebuild switch
+		;;
+	user|home)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} User"
+		echo "${BOLD}Rebuilding and Switching to Generation for:${RESET} home-manager"
+		nix-channel --update
+		home-manager switch
+		;;
+	both)
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Both (Root & User)"
+		echo "${BOLD}Rebuilding and Switching to Generation for:${RESET} Both (NixOS & home-manager)"
+		sudo nix-channel --update
+		nix-channel --update
+		sudo nixos-rebuild switch
+		home-manager switch
+		;;
+	"")
+		echo "${BOLD}Updating Nix Channel(s) as:${RESET} Default (Root & User)"
+		echo "${BOLD}Rebuilding and Switching to Generation for:${RESET} Default (NixOS & home-manager)"
+		sudo nix-channel --update
+		nix-channel --update
+		sudo nixos-rebuild switch
+		home-manager switch
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}upgrade${RESET} option"
+		echo "${BOLD}Available:${RESET} os, home, both"
+		;;
+	esac
+	;;
+*)
+	echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}niaox${RESET} command"
+	echo "${BOLD}Format:${RESET} niaox [OPTION] [RECIPIENT]"
+	echo "${BOLD}Options:${RESET} update, rebuild, upgrade"
+	echo "${BOLD}Recipients:${RESET} root (os), user (home), both, blank for default (both)"
+	;;
+esac
