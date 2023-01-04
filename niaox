@@ -99,10 +99,36 @@ upgrade)
 		;;
 	esac
 	;;
+discard)
+	case $2 in
+	root|os)
+		echo "${BOLD}Discarding Nix Garbage as:${RESET} Root"
+		sudo nix-collect-garbage
+		;;
+	user|home)
+		echo "${BOLD}Discarding Nix Garbage as:${RESET} User"
+		nix-collect-garbage
+		;;
+	both)
+		echo "${BOLD}Discarding Nix Garbage as:${RESET} Both (Root & User)"
+		sudo nix-collect-garbage
+		nix-collect-garbage
+		;;
+	"")
+		echo "${BOLD}Discarding Nix Garbage as:${RESET} Default (Root & User)"
+		sudo nix-collect-garbage
+		nix-collect-garbage
+		;;
+	*)
+		echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}discard${RESET} option"
+		echo "${BOLD}Available:${RESET} os, home, both"
+		;;
+	esac
+	;;
 *)
 	echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}niaox${RESET} command"
 	echo "${BOLD}Format:${RESET} niaox [OPTION] [RECIPIENT]"
-	echo "${BOLD}Options:${RESET} update, rebuild, upgrade"
+	echo "${BOLD}Options:${RESET} update, rebuild, upgrade, discard"
 	echo "${BOLD}Recipients:${RESET} root (os), user (home), both, blank for default (both)"
 	;;
 esac

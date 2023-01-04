@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# windiaow - window operations
+
+echo "Select a Window:"
+WINDOW_ID=$(xdotool selectwindow)
+
+case $1 in
+size)
+	echo "Enter a window width:"
+	read WIDTH
+	echo "Enter a window height:"
+	read HEIGHT
+	xdotool windowsize $WINDOW_ID $WIDTH $HEIGHT
+	;;
+move)
+	echo "Enter an x coordinate:"
+	read POSITION_X
+	echo "Enter a y coordinate:"
+	read POSITION_Y
+	xdotool windowmove $WINDOW_ID $POSITION_X $POSITION_Y
+	;;
+geometry)
+	xdotool getwindowgeometry $WINDOW_ID
+	;;
+info)
+	xdotool getwindowpid $WINDOW_ID
+	xdotool getwindowname $WINDOW_ID
+	xdotool getwindowclassname $WINDOW_ID
+	xdotool getwindowgeometry $WINDOW_ID
+	;;
+game)
+	xdotool windowsize $WINDOW_ID 1920 810
+	xdotool windowmove $WINDOW_ID 320 315
+	;;
+*)
+	echo "${BOLD}Error${RESET} - Unrecognized ${BOLD}windiaow${RESET} command"
+	echo "${BOLD}Format:${RESET} windiaow [OPTION]"
+	echo "${BOLD}Options:${RESET} size, move, geometry, game, info"
+	;;
+esac

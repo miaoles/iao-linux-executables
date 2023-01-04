@@ -2,20 +2,77 @@
 
 # musiaoc
 
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
 complete -W "current-directory subdirectories" disperse-music
 
-rename-tracks () {
-   echo "${BOLD}Renaming MP3 Tracks${RESET}"
-   kid3-cli -c 'fromtag "%{artist} — %{album} — %{track} — %{title}" 1' *.mp3
-   kid3-cli -c 'fromtag "%{artist} — %{album} — %{track} — %{title}" 2' *.mp3
-   echo "${BOLD}Renaming FLAC Tracks${RESET}"
-   kid3-cli -c 'fromtag "%{artist} — %{album} — %{track} — %{title}" 1' *.flac
-   kid3-cli -c 'fromtag "%{artist} — %{album} — %{track} — %{title}" 2' *.flac
-}
-
-flacs-to-mp3s () {
-   fd -t f -e flac -x ffmpeg -i "{}" -qscale:a 0 "{.}.mp3"
-}
+case $1 in
+rename)
+	case $2 in
+		mp3)
+			echo "${BOLD}Renaming MP3 Tracks${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 1' *.mp3
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 2' *.mp3
+			;;
+		flac)
+			echo "${BOLD}Renaming FLAC Tracks${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 1' *.flac
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 2' *.flac
+			;;
+		all)
+			echo "${BOLD}Renaming MP3 Tracks${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 1' *.mp3
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 2' *.mp3
+			echo "${BOLD}Renaming FLAC Tracks${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 1' *.flac
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 2' *.flac
+			echo "${BOLD}Renaming MP4 Tracks${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 1' *.mp4
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, %{track}｣" 2' *.mp4
+			;;
+		disc)
+			echo "${BOLD}Renaming MP3 Tracks with Disc${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, B%{track}｣" 1' *.mp3
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, B%{track}｣" 2' *.mp3
+			echo "${BOLD}Renaming FLAC Tracks with Disc${RESET}"
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, B%{track}｣" 1' *.flac
+			kid3-cli -c 'fromtag "%{artist} — %{title} ｢%{album}, B%{track}｣" 2' *.flac
+			;;
+	esac	
+	;;
+flacs-to-mp3s)
+	fd -t f -e flac -x ffmpeg -i "{}" -qscale:a 0 "{.}.mp3"
+	;;
+mp3s-to-ytmp4)
+	echo "Enter image filename:"
+	read -e IMAGE_FILE
+	find . -type f -name '*.mp3' -print0 | while IFS= read -r -d '' AUDIO_FILE; do
+    	ffmpeg \
+        	-i "${AUDIO_FILE}" \
+        	-loop 1 \
+        	-i "${IMAGE_FILE}" \
+        	-r 15 \
+        	-s 1920x1080 \
+        	-c:v libx264 \
+        	-tune stillimage \
+        	-shortest \
+        	"${AUDIO_FILE}.mp4" \
+        	< /dev/null
+	done
+	rename -- .mp3.mp4 .mp4 *.mp3.mp4
+	;;
+ytmp4s-to-yt)
+	find . -type f -name '*.mp4' -print0 | while IFS= read -r -d '' VIDEO_FILE; do
+		youtube-upload \
+			--title="${VIDEO_FILE}" \
+			--category="Music" \
+			--privacy="unlisted" \
+			--auth-browser \
+			${VIDEO_FILE}
+	done
+	;;
+esac
 
 disperse-music () {
    case $1 in
@@ -49,34 +106,4 @@ disperse-music () {
          done
          ;;
    esac
-}
-
-mp3s-to-ytmp4 () {
-	echo "Enter image filename:"
-	read -e IMAGE_FILE
-	find . -type f -name '*.mp3' -print0 | while IFS= read -r -d '' AUDIO_FILE; do
-    	ffmpeg \
-        	-i "${AUDIO_FILE}" \
-        	-loop 1 \
-        	-i "${IMAGE_FILE}" \
-        	-r 15 \
-        	-s 1920x1080 \
-        	-c:v libx264 \
-        	-tune stillimage \
-        	-shortest \
-        	"${AUDIO_FILE}.mp4" \
-        	< /dev/null
-	done
-	rename -- .mp3.mp4 .mp4 *.mp3.mp4
-}
-
-ytmp4s-to-yt () {
-	find . -type f -name '*.mp4' -print0 | while IFS= read -r -d '' VIDEO_FILE; do
-		youtube-upload \
-			--title="${VIDEO_FILE}" \
-			--category="Music" \
-			--privacy="unlisted" \
-			--auth-browser \
-			${VIDEO_FILE}
-	done
 }
